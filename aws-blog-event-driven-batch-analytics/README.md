@@ -15,32 +15,32 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 
 
 ### Pre-Requisites
-1) Create VPC with at least one private "MyPrivateSubnet" and one public subnet "MyPublicSubnet".
-2) Create a NAT Gateway or NAT Instance for [lambda functions in private subnet](https://aws.amazon.com/blogs/aws/new-access-resources-in-a-vpc-from-your-lambda-functions/) to be able to access internet.
-3) Create a role "myLambdaRole" with AWSLambdaVPCAccessExecution, AWSLambdaRole, ElasticMapReduceForEC2Role,S3 and Cloudwatch access policies.
-4) Create security group "MySecurityGroup" with inbound MySQL (3306) and Redshift (5439) ports open.
-5) Jar file with all dependencies is already available in S3 at this location. Download it your local environment [location](s3://event-driven-batch-analytics/code/eventdrivenbatchanalytics.jar).
-6) If you wish to build your own jar,download mySQL JDBC driver and Redshift JDBC Driver and add it to your maven repository.
+1. Create VPC with at least one private "MyPrivateSubnet" and one public subnet "MyPublicSubnet"
+2. Create a NAT Gateway or NAT Instance for [lambda functions in private subnet](https://aws.amazon.com/blogs/aws/new-access-resources-in-a-vpc-from-your-lambda-functions/) to be able to access internet
+3. Create a role "myLambdaRole" with AWSLambdaVPCAccessExecution, AWSLambdaRole, ElasticMapReduceForEC2Role,S3 and Cloudwatch access policies
+4. Create security group "MySecurityGroup" with inbound MySQL (3306) and Redshift (5439) ports open.
+5. Jar file with all dependencies is already available in S3 at this location. Download it your local environment [location](s3://event-driven-batch-analytics/code/eventdrivenbatchanalytics.jar).
+6. If you wish to build your own jar,download mySQL JDBC driver and Redshift JDBC Driver and add it to your maven repository
 
 ### Getting Started
 
-1) [Create a Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
-2) Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql
-3) Create a two node ds2.xlarge Redshift cluster .
-4) Connect to the cluster through your preferred SQL client and execute statements inside resources/edba_redshift.sql file
+1. [Create a Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
+2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql
+3. Create a two node ds2.xlarge Redshift cluster .
+4. Connect to the cluster through your preferred SQL client and execute statements inside resources/edba_redshift.sql file
 
-5) Create S3 bucket
+5. Create S3 bucket
 
   ```
   aws s3 mb event-driven-batch-analytics
 
   ```
-6) Create Validation/Conversion Layer Lambda function
+6. Create Validation/Conversion Layer Lambda function
 
 ```
 aws lambda create-function --function-name validateAndNormalizeInputData --zip-file fileb:///<<MyPath>>/eventdrivenbatchanalytics.jar --handler com.amazonaws.bigdatablog.edba.LambdaContainer::validateAndNormalizeInputData --role arn:aws:iam::<<myAccountNumber>>:role/<<myLambdaRole>> --runtime java8 --timeout 120
 ```
-7) Provide S3 permissions to invoke the Validation Layer lambda function
+7. Provide S3 permissions to invoke the Validation Layer lambda function
 
 ```
 aws lambda add-permission --function-name auditValidatedFile --statement-id 2222 --action "lambda:InvokeFunction" --principal s3.amazonaws.com --source-arn arn:aws:s3:::event-driven-batch-analytics --source-account <<MyAccount>>
