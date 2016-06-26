@@ -1,6 +1,6 @@
 package com.amazonaws.bigdatablog.edba.emr;
 
-/*import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -22,12 +22,12 @@ import com.amazonaws.auth.AWSSessionCredentials;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.google.common.collect.ImmutableMap;
 
-import scala.collection.Seq;*/
+import scala.collection.Seq;
 
 public class ProcessVendorTrasactions {
 
 	final static String redshiftJDBCURL="jdbc:redshift://testcluster.cjqhmqmvqnwz.us-east-1.redshift.amazonaws.com:5439/test?user=wendyspos&password=W3ndysP0s";
-	/*public static void main(String[] args){
+	public static void main(String[] args){
 		
 		    	SparkConf conf = new SparkConf().setAppName("Spark Redshift No Access-Keys");
 		    	List<StructField> schemaFields = new ArrayList<StructField>();
@@ -83,5 +83,5 @@ public class ProcessVendorTrasactions {
 			    .option("tempdir", "s3n://event-driven-batch-analytics/temp/emr/redshift/").mode(SaveMode.Overwrite).save();
 			
 
-	}*/
+	}
 }
