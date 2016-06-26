@@ -96,7 +96,7 @@ aws s3 sync . s3://event-driven-batch-analytics/data/source-identical/
 ```
 select job_config_id from aggrjobconfiguration where last_exec_status = 'RUNNING';
 ```
-21. Connect to the redshift cluster and verify that the data in the tables "salessummary" and "saleitemsummary" is populated
+21. Connect to the redshift cluster and verify that the data in the tables "vendortranssummary" is populated
 22. If for any reason a job is failed, execute the below query to find out the impacted files
 ```
 select t1.job_config_id,t2.file_url,t2.last_validated_timestamp from aggrjobconfiguration t1 join ingestedfilestatus t2 on json_contains(t2.submitted_jobs,json_array(t1.job_config_id))=1 where t1.last_exec_status='FAILED';

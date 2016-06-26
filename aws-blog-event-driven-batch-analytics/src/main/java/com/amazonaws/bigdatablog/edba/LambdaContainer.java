@@ -108,10 +108,13 @@ public class LambdaContainer {
 		List<String> activeClusters = getActiveClusterId();
 		String clusterId = null;
 		while(rs.next()){
-			ResultSet conditionQueryResult = jobInputFilesMinTimestampStmt.executeQuery(jobInputFilesMinTimestamp+rs.getString("job_input_pattern"));
+			ResultSet conditionQueryResult = jobInputFilesMinTimestampStmt.executeQuery(jobInputFilesMinTSAndCountSQL+rs.getString("job_input_pattern"));
 			conditionQueryResult.next();
-			if(conditionQueryResult.getTimestamp(1).after(rs.getTimestamp("last_run_timestamp")) 
-					&& isAdditionalCriteriaPassed(rs.getString("job_addl_criteria"),conn)){
+			if(conditionQueryResult.getTimestamp("min_lvt").after(rs.getTimestamp("last_run_timestamp")) 
+					&&
+					conditionQueryResult.getInt("file_count") >= rs.getInt("job_min_file_count")
+					&&
+					isAdditionalCriteriaPassed(rs.getString("job_addl_criteria"),conn)){
 				clusterId = activeClusters.get(new Random().nextInt(activeClusters.size()-0));
 				String jobId = fireEMRJob(rs.getString("job_params"),clusterId);
 				updateJobConfigPS.setString(1,clusterId+":"+jobId);
@@ -224,8 +227,9 @@ public class LambdaContainer {
 		}
 	}
 	
-		final  String conditionFetchSQL = "select job_config_id, job_params,job_input_pattern,coalesce(last_run_timestamp,now() - interval 10 year) as last_run_timestamp,job_addl_criteria from edbaconfig.aggrjobconfiguration where last_exec_status is null or last_exec_status <> 'RUNNING'";
-		final  String jobInputFilesMinTimestamp = "select min(last_validated_timestamp) from edbaconfig.ingestedfilestatus where ";
+		final  String conditionFetchSQL = "select job_config_id, job_params,job_input_pattern,coalesce(last_run_timestamp,now() - interval 10 year) as last_run_timestamp,job_addl_criteria,coalesce(job_min_file_count,0) as job_min_file_count from edbaconfig.aggrjobconfiguration where last_exec_status is null or last_exec_status <> 'RUNNING'";
+		final  String jobInputFilesMinTSAndCountSQL = "select count(file_url) as file_count,min(last_validated_timestamp) as min_lvt from edbaconfig.ingestedfilestatus where ";
+	
 		final  String updateJobConfigStatusSQL = "update edbaconfig.aggrjobconfiguration set last_exec_stepid=?,last_exec_status='RUNNING',last_run_timestamp=current_timestamp "
 				+ " where job_config_id=? ";
 		final  String updateSubmittedJobsJSON =  "update ingestedfilestatus set submitted_jobs = case when "
