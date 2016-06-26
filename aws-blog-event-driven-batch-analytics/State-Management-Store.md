@@ -26,6 +26,9 @@ The job configuration "J102" is similar to the configuration "J101" with the exc
 
 | job_config_id	| job_input_pattern |	job_min_file_count | job_params | additional_criteria |	last_exec_stepid | last_exec_status |	last_run_timestamp |
 | ------------ | ---------------- | --------- | ----------- | ---------- | -------- | --------- | ---------- |
+| J101 |	ingestedfilestatus.file_url like %validated%IL%.csv |	11 | spark-submit,--deploy-mode,cluster,—class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTransactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar s3://event-driven-batch-analytics/data/validated/%IL%.csv | select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day | |  | |
+| J102 |	ingestedfilestatus.file_url like %validated%CA%.CSV	| 25 | spark-submit,--deploy-mode,cluster,—class,com.awsblogs.bigdata.AggregateTransInfo,s3://event-driven-batch-analytics/code/aggregatetransinfo.jar s3://event-driven-batch-analytics/data/validated/%CA%.csv |	select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day |  | | |			
+
 
 
 ### INGESTEDFILESTATUS
