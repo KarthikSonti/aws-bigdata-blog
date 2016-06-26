@@ -24,7 +24,7 @@ Here are the sample records for the use case we are walking through. The job con
 
 The job configuration "J102" is similar to the configuration "J101" with the exception that the file prefix will have "CA" for California province files and the number of vendor transactions to be collected are at least 25
 
-| job_config_id	 | job_input_pattern |	job_min_file_count |	job_params |	additional_criteria |	last_exec_stepid	| last_exec_status |	last_run_timestamp |
+| job_config_id	| job_input_pattern |	job_min_file_count | job_params | additional_criteria |	last_exec_stepid | last_exec_status |	last_run_timestamp |
 | --- | --- | --- | --- | --- | --- | --- | -- |
 
 
