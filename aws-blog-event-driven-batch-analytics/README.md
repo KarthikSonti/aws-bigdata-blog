@@ -31,6 +31,7 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 5. Update LambdaContainer.java with your  mySQL endpoint and credentials
 6. Update ProcessVendorTransactions.java with your Redshift endpoint and credentials
 7. Build the jar by executing maven shade package. You need to execute this command from the director where the pom.xml is located
+
   ```
   mvn package
   ```
