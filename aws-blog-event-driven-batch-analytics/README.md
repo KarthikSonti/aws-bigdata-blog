@@ -24,9 +24,9 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 
 ### Getting Started
 
-1. Create a [Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
+1. Create  [Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
 2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql
-3. Create a two node ds2.xlarge [Redshift cluster](http://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-console.html#create-cluster)
+3. Create a two node dc1.large [Redshift cluster](http://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-console.html#create-cluster)
 4. Connect to the cluster through your preferred SQL client and execute statements inside resources/edba_redshift.sql file
 5. Update LambdaContainer.java with your  mySQL endpoint and credentials
 6. Update ProcessVendorTransactions.java with your Redshift endpoint and credentials
