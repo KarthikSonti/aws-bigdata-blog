@@ -15,12 +15,12 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 
 
 ### Pre-Requisites
-1. Create VPC with at least one private "MyPrivateSubnet" and one public subnet "MyPublicSubnet"
-2. Create a NAT Gateway or NAT Instance for [lambda functions in private subnet](https://aws.amazon.com/blogs/aws/new-access-resources-in-a-vpc-from-your-lambda-functions/) to be able to access internet
-3. Create a role "myLambdaRole" with AWSLambdaVPCAccessExecution, AWSLambdaRole, ElasticMapReduceForEC2Role,S3 and Cloudwatch access policies
-4. Create security group "MySecurityGroup" with inbound MySQL (3306) and Redshift (5439) ports open
-5. Jar file with all dependencies is already available in S3 at this location. Download it your local environment [location](s3://event-driven-batch-analytics/code/eventdrivenbatchanalytics.jar)
-6. If you wish to build your own jar,download mySQL JDBC driver and Redshift JDBC Driver and add it to your maven repository
+1) Create VPC with at least one private "MyPrivateSubnet" and one public subnet "MyPublicSubnet"
+2) Create a NAT Gateway or NAT Instance for [lambda functions in private subnet](https://aws.amazon.com/blogs/aws/new-access-resources-in-a-vpc-from-your-lambda-functions/) to be able to access internet
+3) Create a role "myLambdaRole" with AWSLambdaVPCAccessExecution, AWSLambdaRole, ElasticMapReduceForEC2Role,S3 and Cloudwatch access policies
+4) Create security group "MySecurityGroup" with inbound MySQL (3306) and Redshift (5439) ports open
+5) Jar file with all dependencies is already available in S3 at this location. Download it your local environment [location](s3://event-driven-batch-analytics/code/eventdrivenbatchanalytics.jar)
+6) If you wish to build your own jar,download mySQL JDBC driver and Redshift JDBC Driver and add it to your maven repository
 
 ### Getting Started
 
