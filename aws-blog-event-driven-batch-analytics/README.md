@@ -4,9 +4,20 @@
 
 This repository contains the code that supports the [AWS Big Data Blog Post](https://blogs.aws.amazon.com/bigdata/)
 
+### Usecase Description
+Lets take a sample usecase and write code implementing the event driven batch analytics framework we discussed so far. Company ABC Enterprise manufactures copy machines which are sold by its vendors across the country. All these Vendors run on wide variety of platforms and they submit cumulative transaction files to ABC enterprises at varuious cadence levels through out the day in tab delimited .tdf format. Some of these vendors due to their system limitations sometimes send additional data starting with characters such as “----“.
+
+The requirement is to be able to updates insights  on the sales made by each vendor for a given item through out the day as soon as the complete list of vendor files from a given province are available. The number of vendors per province is fixed and seldom changes.
+
+The aggregation job for given province should not be submitted until the configured number of vendor files from that province are available and also until the item master data update is posted at the beginning of the day. A master data update is identified by the presence of atleast one “item.csv” file.
+
+The aggregation job should consider only transaction codes 4 (sale amount) , 5 (tax amount) and 6 (discount amount). Rest of the codes can be ignored. Once the aggregation job is completed only one record should exist for a combination of vendor,item and transaction date
+
+## Implementation
+
 The class LambdaContainer contains all the Lambda functions configured for "Validation/Conversion" , "Tracking Input" ,  "EMR Job Submission" and "EMR Job Monitoring" layers. Fabricated "sales" and "items" data files are created to test this code. [Maven](https://maven.apache.org/) is used for build and dependency management
 
-## Pre-Requisites
+### Pre-Requisites
 1. Create VPC with at least one private <<MyPrivateSubnet>> and one public subnet <<MyPublicSubnet>>
 2. Create a NAT Gateway or NAT Instance for [lambda functions in private subnet](https://aws.amazon.com/blogs/aws/new-access-resources-in-a-vpc-from-your-lambda-functions/) to be able to access internet
 3. Create a role <<myLambdaRole> with AWSLambdaVPCAccessExecution, AWSLambdaRole, ElasticMapReduceForEC2Role,S3 and Cloudwatch access policies
@@ -14,7 +25,7 @@ The class LambdaContainer contains all the Lambda functions configured for "Vali
 5. Jar file with all dependencies is already available in S3 at this location. Download it your local environment [location](s3://event-driven-batch-analytics/code/eventdrivenbatchanalytics.jar)
 6. If you wish to build your own jar,download mySQL JDBC driver and Redshift JDBC Driver and add it to your maven repository
 
-## Getting Started
+### Getting Started
 
 1. Create S3 bucket
   ```
@@ -87,7 +98,7 @@ aws events put-targets --rule monitorEMRJobRule  --targets '{"Id" : "1", "Arn": 
 15. [Create a Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
 16. Connect to the instance and execute sql statements inside resources/edba_config_mysql.sql
 17. Create Redshift cluster and connect to it to execute statements inside resources/edba_redshift.sql file
-18. Download the files from resource/sampledata/ to your lcoal directory and from the directory where you downloaded the files to, upload them to S3://event-driven-batch-analytics/ with prefix data/source-identical
+18. Download the files from resource/sampledata/ to your local directory and from the directory where you downloaded the files to, upload them to S3://event-driven-batch-analytics/ with prefix data/source-identical
 ```
 aws s3 sync . s3://event-driven-batch-analytics/data/source-identical/
 ```
