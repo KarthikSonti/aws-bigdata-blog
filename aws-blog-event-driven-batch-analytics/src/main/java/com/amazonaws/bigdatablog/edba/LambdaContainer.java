@@ -241,9 +241,9 @@ public class LambdaContainer {
 
 		final String auditValidatedFileSQL = "INSERT INTO edbaconfig.ingestedfilestatus (file_url, submitted_jobs,last_update_status, last_validated_timestamp) VALUES(?,null,?,current_timestamp) ON DUPLICATE KEY UPDATE  last_update_status = ? , submitted_jobs=null,last_validated_timestamp=current_timestamp";
 
-		final String url = "jdbc:mysql://edbaconfig.ceizmegioajd.us-east-1.rds.amazonaws.com:3306/edbaconfig";
-		final String user = "edba";
-		final String password = "edbapass";
+		final String url = "jdbc:mysql://<<YourClusterURL>>:3306/<<YourDatabase>>";
+		final String user = "<<YourUser>>";
+		final String password = "<<YourPassword>>";
 
 		
 }

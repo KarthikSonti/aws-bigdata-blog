@@ -26,7 +26,7 @@ import scala.collection.Seq;
 
 public class ProcessVendorTrasactions {
 
-	final static String redshiftJDBCURL="jdbc:redshift://testcluster.cjqhmqmvqnwz.us-east-1.redshift.amazonaws.com:5439/test?user=wendyspos&password=W3ndysP0s";
+	final static String redshiftJDBCURL="jdbc:redshift://<<YourClusterEndPoint>>:5439/test?user=<<YourUser>>&password=<<YourPassword>>";
 	public static void main(String[] args){
 		
 		    	SparkConf conf = new SparkConf().setAppName("Spark Redshift No Access-Keys");
