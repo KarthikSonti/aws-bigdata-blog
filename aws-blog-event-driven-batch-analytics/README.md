@@ -33,16 +33,19 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 
   ```
   aws s3 mb event-driven-batch-analytics
+
   ```
 6. Create Validation/Conversion Layer Lambda function
 
 ```
 aws lambda create-function --function-name validateAndNormalizeInputData --zip-file fileb:///<<MyPath>>/eventdrivenbatchanalytics.jar --handler com.amazonaws.bigdatablog.edba.LambdaContainer::validateAndNormalizeInputData --role arn:aws:iam::<<myAccountNumber>>:role/<<myLambdaRole>> --runtime java8 --timeout 120
+
 ```
 7. Provide S3 permissions to invoke the Validation Layer lambda function
 
 ```
 aws lambda add-permission --function-name auditValidatedFile --statement-id 2222 --action "lambda:InvokeFunction" --principal s3.amazonaws.com --source-arn arn:aws:s3:::event-driven-batch-analytics --source-account <<MyAccount>>
+
 ```
 8. Create "Input Tracking Layer" lambda function
 
