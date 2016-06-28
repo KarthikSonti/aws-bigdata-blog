@@ -25,7 +25,7 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 ### Getting Started
 
 1. Create  [Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
-2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql
+2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql. 
 3. Create a two node dc1.large [Redshift cluster](http://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-console.html#create-cluster)
 4. Connect to the cluster through your preferred SQL client and execute statements inside resources/edba_redshift.sql file
 5. Update LambdaContainer.java with your  mySQL endpoint and credentials
@@ -115,7 +115,7 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
   ```
   aws events put-targets --rule monitorEMRJobRule  --targets '{"Id" : "1", "Arn": "arn:aws:lambda:us-east-1:<<myAccountNumber>>:function:monitorEMRAggregationJob"}'
   ```
-22. Download the files from resource/sampledata/ to your local directory and from the directory where you downloaded the files to, upload them to S3://event-driven-batch-analytics/ with prefix data/source-identical
+22. Download the files from resources/sampledata/ to your local directory and from the directory where you downloaded the files to, upload them to S3://event-driven-batch-analytics/ with prefix data/source-identical.
 
   ```
   aws s3 sync . s3://event-driven-batch-analytics/data/source-identical/
@@ -126,9 +126,11 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
   ```
   select job_config_id from aggrjobconfiguration where last_exec_status = 'RUNNING';
   ```
-24. Connect to the redshift cluster and verify that the data in the tables "vendortranssummary" is populated
+24. Verify that the job configuration "J101" (Vendor transactions posted from the state of "Illinois") is in "RUNNING" state
 
-25. If for any reason a job is failed, execute the below query to find out the impacted files
+25. Connect to the redshift cluster and verify that the data in the tables "vendortranssummary" is populated for the vendor transactions.
+
+26. If for any reason a job is failed, execute the below query to find out the impacted files
 
   ```
   select t1.job_config_id,t2.file_url,t2.last_validated_timestamp from aggrjobconfiguration t1 join ingestedfilestatus t2 on json_contains(t2.submitted_jobs,json_array(t1.job_config_id))=1 where t1.last_exec_status='FAILED';

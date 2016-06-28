@@ -1,4 +1,4 @@
-create table ingestedfilestatus(
+create table edbaconfig.ingestedfilestatus(
 file_url varchar(500) primary key,
 submitted_jobs json,
 last_update_status varchar(50),
@@ -16,3 +16,9 @@ last_exec_stepid varchar(50),
 last_exec_status varchar(20),
 last_run_timestamp timestamp
 );
+
+insert into edbaconfig.aggrjobconfiguration(job_config_id,job_input_pattern,job_min_file_count,job_addl_criteria,job_params,last_exec_stepid,last_exec_status,last_run_timestamp)
+ values('J101','ingestedfilestatus.file_url like \'%validated%IL%.csv\'',13,'select 1 from ingestedfilestatus where file_url like \'%Item%.csv\' and last_validated_timestamp > current_timestamp - interval 1 day','spark-submit,--deploy-mode,cluster,--class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTrasactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar,s3://event-driven-batch-analytics/validated/data/source-identical/IL*.csv',null,null,null);
+
+insert into edbaconfig.aggrjobconfiguration(job_config_id,job_input_pattern,job_min_file_count,job_addl_criteria,job_params,last_exec_stepid,last_exec_status,last_run_timestamp)
+ values('J102','ingestedfilestatus.file_url like \'%validated%CA%.csv\'',25,'select 1 from ingestedfilestatus where file_url like \'%Item%.csv\' and last_validated_timestamp > current_timestamp - interval 1 day','spark-submit,--deploy-mode,cluster,—-class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTrasactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar,s3://event-driven-batch-analytics/validated/data/source-identical/CA*.csv',null,null,null);

@@ -4,6 +4,8 @@
 
 A simple statement management store can be accomplished with two tables: one for storing aggregation job configurations (AGGRJOBCONFIGURATION) and another for storing the ingested file status (INGESTEDFILESTATUS). Here are the columns in each table and their descriptions. The DDL and the EMR job configurations for the tracking store can be found here
 
+Sample records for the AGGRJOBCONFIGURATION are also provided here as a reference. They indicate that the job for Illinois state will not be submitted unless there are alteast 13 vendor transaction files are posted and master data for Item data is posted. Similar rules were also configured for the state of California with the execption of minimum file count is 25.
+
 
 
 ### AGGRJOBCONFIGURATION
@@ -18,17 +20,6 @@ A simple statement management store can be accomplished with two tables: one for
 | last_exec_status | The status (COMPLETED/FAILED/RUNNING) of the EMR step that has been submitted for this configuration |
 | last_run_timestamp | The last time when this job was run. |
 
-##### Sample AGGRJOBCONFIGURATION Records
-
-Here are the sample records for the use case we are walking through. The job configuration "J101" indicates that there need be at least 11 files collected from Illinois, identified by having IL in the file prefix,  and an update from on Item master data, identified by Item%.csv, posted in the last 24 hours
-
-The job configuration "J102" is similar to the configuration "J101" with the exception that the file prefix will have "CA" for California province files and the number of vendor transactions to be collected are at least 25
-
-| job_config_id	| job_input_pattern |	job_min_file_count | job_params | additional_criteria |	last_exec_stepid | last_exec_status |	last_run_timestamp |
-| ------------ | ---------------- | --------- | ----------- | ---------- | -------- | --------- | ---------- |
-| J101 |	ingestedfilestatus.file_url like %validated%IL%.csv |	11 | spark-submit,--deploy-mode,cluster,—class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTransactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar s3://event-driven-batch-analytics/data/validated/%IL%.csv | select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day | |  | |
-| J102 |	ingestedfilestatus.file_url like %validated%CA%.CSV	| 25 | spark-submit,--deploy-mode,cluster,—class,com.awsblogs.bigdata.AggregateTransInfo,s3://event-driven-batch-analytics/code/aggregatetransinfo.jar s3://event-driven-batch-analytics/data/validated/%CA%.csv |	select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day |  | | |			
-
 
 
 ### INGESTEDFILESTATUS
@@ -40,3 +31,14 @@ The job configuration "J102" is similar to the configuration "J101" with the exc
 | last_validated_timestamp | The last time when a valid update on this file is received |
 
 These two tables are read by the Lambda functions in the EMR Job Submission and Monitoring Layer that we are going to see next. A variation of this design is to have code component to be executed for “additional_criteria” instead of sql statements and may be also to extend it to beyond EMR (for example, a Data Pipeline job). The data models shown here are just an indication of how this layer can be used. You may need to tweak them to suit your specific need.
+
+##### Sample AGGRJOBCONFIGURATION Records
+
+Here are the sample records for the use case we are walking through. The job configuration "J101" indicates that there need be at least 13 files collected from Illinois, identified by having IL in the file prefix,  and an update from on Item master data, identified by Item%.csv, posted in the last 24 hours
+
+The job configuration "J102" is similar to the configuration "J101" with the exception that the file prefix will have "CA" for California province files and the number of vendor transactions to be collected are at least 25
+
+| job_config_id	| job_input_pattern |	job_min_file_count | job_params | additional_criteria |	last_exec_stepid | last_exec_status |	last_run_timestamp |
+| ------------ | ---------------- | --------- | ----------- | ---------- | -------- | --------- | ---------- |
+| J101 |	ingestedfilestatus.file_url like %validated%IL%.csv |	13 | spark-submit,--deploy-mode,cluster,--class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTrasactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar,s3://event-driven-batch-analytics/validated/data/source-identical/IL*.csv | select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day | |  | |
+| J102 |	ingestedfilestatus.file_url like %validated%CA%.CSV	| 25 | spark-submit,--deploy-mode,cluster,--class,com.amazonaws.bigdatablog.edba.emr.ProcessVendorTrasactions,s3://event-driven-batch-analytics/code/eventdrivenanalytics.jar,s3://event-driven-batch-analytics/validated/data/source-identical/CA*.csv |	select 1 from ingestedfilestatus where file_url like '%Item%.csv' and last_validated_timestamp > current_timestamp - interval 1 day |  | | |
