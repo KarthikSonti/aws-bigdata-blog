@@ -32,7 +32,8 @@ Sample records for the AGGRJOBCONFIGURATION are also provided here as a referenc
 
 These two tables are read by the Lambda functions in the EMR Job Submission and Monitoring Layer that we are going to see next. A variation of this design is to have code component to be executed for “additional_criteria” instead of sql statements and may be also to extend it to beyond EMR (for example, a Data Pipeline job). The data models shown here are just an indication of how this layer can be used. You may need to tweak them to suit your specific need.
 
-##### Sample AGGRJOBCONFIGURATION Records
+
+### Sample AGGRJOBCONFIGURATION Records
 
 Here are the sample records for the use case we are walking through. The job configuration "J101" indicates that there need be at least 13 files collected from Illinois, identified by having IL in the file prefix,  and an update from on Item master data, identified by Item%.csv, posted in the last 24 hours
 
