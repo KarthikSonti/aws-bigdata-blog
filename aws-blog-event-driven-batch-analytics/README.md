@@ -9,7 +9,7 @@ Lets take a sample usecase and write code implementing the event driven batch an
 
 The requirement is to be able to updates insights  on the sales made by each vendor for a given item through out the day as soon as the complete list of vendor files from a given province are available. The number of vendors per province is fixed and seldom changes.
 
-The aggregation job for given province should not be submitted until the configured number of vendor files from that province are available and also until the item master data update is posted at the beginning of the day. A master data update is identified by the presence of atleast one “item.csv” file.
+The aggregation job for given province should not be submitted until the configured number of vendor files from that province are available and also until the item master data update is posted at the beginning of the day. A master data update is identified by the presence of at least one “Item*.csv” file in the last 24 hours.
 
 The aggregation job should consider only transaction codes 4 (sale amount) , 5 (tax amount) and 6 (discount amount). Rest of the codes can be ignored. Once the aggregation job is completed only one record should exist for a combination of vendor,item and transaction date
 
@@ -25,7 +25,7 @@ The aggregation job should consider only transaction codes 4 (sale amount) , 5 (
 ### Getting Started
 
 1. Create  [Amazon RDS Mysql 5.7.x instance](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html)
-2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql. 
+2. Connect to the mysql database instance through your preferred SQL client and execute sql statements inside resources/edba_config_mysql.sql.
 3. Create a two node dc1.large [Redshift cluster](http://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-console.html#create-cluster)
 4. Connect to the cluster through your preferred SQL client and execute statements inside resources/edba_redshift.sql file
 5. Update LambdaContainer.java with your  mySQL endpoint and credentials
