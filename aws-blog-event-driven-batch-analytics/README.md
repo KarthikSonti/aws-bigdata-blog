@@ -5,13 +5,13 @@
 This repository contains the code that supports the [AWS Big Data Blog Post](https://blogs.aws.amazon.com/bigdata/)
 
 ### Usecase Description
-Lets take a sample usecase and write code implementing the event driven batch analytics framework we discussed so far. Company ABC Enterprise manufactures copy machines which are sold by its vendors across the country. All these Vendors run on wide variety of platforms and they submit cumulative transaction files to ABC enterprises at varuious cadence levels through out the day in tab delimited .tdf format. Some of these vendors due to their system limitations sometimes send additional data starting with characters such as “----“.
+Yummy Foods has franchise stores all over the country. These franchise stores run on hetrogenous platforms and they submit cumulative transaction files to Yummy Foods at varuious cadence levels through out the day in tab delimited .tdf format. Some of these franchise stores due to their system limitations ocassionally send additional data starting with characters such as “----“.
 
-The requirement is to be able to updates insights  on the sales made by each vendor for a given item through out the day as soon as the complete list of vendor files from a given province are available. The number of vendors per province is fixed and seldom changes.
+The requirement is to be able to update insights on the sales made by each franchise for a given item through out the day as soon as the complete list of franchise files from a given province are available. The number of franchises per province is fixed and seldom changes.
 
-The aggregation job for given province should not be submitted until the configured number of vendor files from that province are available and also until the item master data update is posted at the beginning of the day. A master data update is identified by the presence of at least one “Item*.csv” file in the last 24 hours.
+The aggregation job for given province should not be submitted until the configured number of franchise store files from that province are available and also until the product master data update is posted at the beginning of the day. A master data update is identified by the presence of atleast one “Item.csv” file for that day
 
-The aggregation job should consider only transaction codes 4 (sale amount) , 5 (tax amount) and 6 (discount amount). Rest of the codes can be ignored. Once the aggregation job is completed only one record should exist for a combination of vendor,item and transaction date
+The aggregation job should consider only transaction codes 4 (sale amount) , 5 (tax amount) and 6 (discount amount). Rest of the codes can be ignored. Once the aggregation job is completed only one record should exist for a combination of franchise store,item and transaction date
 
 
 ### Pre-Requisites
